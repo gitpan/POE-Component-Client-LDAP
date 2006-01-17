@@ -60,10 +60,17 @@ INTERFACE DIFFERENCES
     With regards to Net::LDAP, all interfaces are to be used as documented,
     with the following exceptions.
 
-    POE::Component::Client::LDAP->new( hostname, callback => $coderef,
-    OPTIONS )
+    POE::Component::Client::LDAP->new( hostname, OPTIONS ) =item
+    POE::Component::Client::LDAP->new( OPTIONS ) =item
+    POE::Component::Client::LDAP->new()
       A call to new() is non-blocking, always returning an object.
 
+      If a hostname is supplied, new() also acts as though you have called
+      connect(). Please read the docs for connect() to see how the arguments
+      work.
+
+    $object->connect( hostname, OPTIONS ) =item $object->connect( OPTIONS )
+    =item $object->connect()
       The 'callback' argument has been added and should always be supplied
       to notify your code when a connection is established.
 
@@ -96,9 +103,9 @@ CALLBACK SEMANTICS
     here. The exception to this is the callback for new() which does not
     exist in Net::LDAP, and thus I have defined myself.
 
-    new
-      No arguments are passed to indicate that the connection list has been
-      exhausted and no further attempts will be made.
+    new =item connect
+      No arguments are passed to indicate that an existing connection has
+      been closed.
 
       The first argument is a boolean indicator of whether a connection has
       succeeded or failed. The second argument contains the host spec used

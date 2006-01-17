@@ -17,14 +17,19 @@ POE::Session->create(
 		},
 		connect => sub {
 			my ($heap, $session, $callback_args) = @_[HEAP, SESSION, ARG1];
-			if ( $callback_args->[0] ) {
-				$heap->{ldap}->bind(
-					callback => $session->postback( 'bind' ),
-				);
+			if (exists( $callback_args->[0] )) {
+				if ($callback_args->[0]) {
+					$heap->{ldap}->bind(
+						callback => $session->postback( 'bind' ),
+					);
+				}
+				else {
+					delete $heap->{ldap};
+					print "Connection Failed\n";
+				}
 			}
 			else {
-				delete $heap->{ldap};
-				print "Connection Failed\n";
+				print "disconnected\n";
 			}
 		},
 		bind => sub {
